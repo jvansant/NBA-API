@@ -1,82 +1,107 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = "https://www.espn.com/nba/team/stats/_/name/"
 teams = ["bos","bkn","ny","phi","tor","chi","cle","det","ind","mil","den","min","okc","por","utah","gs","lac","lal","phx","sac","atl","cha","mia","orl","wsh","dal","hou","mem","no","sa"]
+# For now I'm using this dict to put more meaningful info in the player team attribute. Might try to scrape it instead, we'll see.
+fullTeamDict = {
+    "bos": "Boston Celtics",
+    "bkn": "Brooklyn Nets",
+    "ny": "New York Knicks",
+    "phi": "Philadelphia 76ers",
+    "tor": "Toronto Raptors",
+    "chi": "Chicago Bulls",
+    "cle": "Cleveland Cavaliers",
+    "det": "Detroit Pistons",
+    "ind": "Indiana Pacers",
+    "mil": "Milwaukee Bucks",
+    "den": "Denver Nuggets",
+    "min": "Minnesota Timberwolves",
+    "okc": "Oklahoma City Thunder",
+    "por": "Portland Trailblazers",
+    "utah": "Utah Jazz",
+    "gs": "Golden State Warriors",
+    "lac": "Los Angeles Clippers",
+    "lal": "Los Angeles Lakers",
+    "phx": "Phoenix Suns",
+    "sac": "Sacramento Kings",
+    "atl": "Atlanta Hawks",
+    "cha": "Charlotte Hornets",
+    "mia": "Miami Heat",
+    "orl": "Orlando Magic",
+    "wsh": "Washington Wizards",
+    "dal": "Dallas Mavericks",
+    "hou": "Houston Rockets",
+    "mem": "Memphis Grizzlies",
+    "no": "New Orleans Pelicans",
+    "sa": "San Antonio Spurs"
+}
+# Right now this is just a list that holds all of the dicts for each team, there's no compiled stats or anything like that yet
+# I just wanted to get the framework ready to iterate through ALL of the teams to get every player
+# This way we're primed to get the database created, and then we're off to the races
+allTeamDicts = []
+for teamExtension in teams:
+    url = "https://www.espn.com/nba/team/stats/_/name/"
+    teamUrl = url + teamExtension
+    response = requests.get(teamUrl)
 
-allPlayerLinks = []
-url = "https://www.espn.com/nba/team/stats/_/name/mil"
-response = requests.get(url)
+    if response.status_code == 200 and response.headers["Content-Type"].find("html") > -1:
+        raw_html = response.text
+    else:
+        print("Bad stuff")
 
-if response.status_code == 200 and response.headers["Content-Type"].find("html") > -1:
-    raw_html = response.text
-else:
-    print("Bad stuff")
+    html = BeautifulSoup(raw_html, "html.parser")
+    players = html.select("tbody.Table__TBODY > tr.Table__TR > td.Table__TD > span > a.AnchorLink")
 
-html = BeautifulSoup(raw_html, "html.parser")
-players = html.select("tbody.Table__TBODY > tr.Table__TR > td.Table__TD > span > a.AnchorLink")
+    stats = html.select("tbody.Table__TBODY > tr.Table__TR")
+    statLst = []
+    for stat in stats:
+        for item in (stat.select("td.Table__TD > span")):
+            statLst.append(item.text)
 
-# playerList = []
-# for item in players:
-#     playerList.append(item.text)
-# playerList = list(set(playerList))
+    firstItem = statLst[0]
+    stopPoint = statLst[1:].index(firstItem)
+    statLst = statLst[:stopPoint]
 
-# positions = html.select("tbody.Table__TBODY > tr.Table__TR > td.Table__TD > span > span.font10")
-# positionList = []
-# for position in positions:
-#     positionList.append(position.text)
+    totalIndex = statLst.index("Total") + 1
+    realPlayerList = statLst[:totalIndex]
+    allStats = statLst[totalIndex:] + [""]
 
-# positionList = positionList[:len(playerList)]
+    statsByPlayer = []
+    totalLoops = 14 * len(realPlayerList)
 
-stats = html.select("tbody.Table__TBODY > tr.Table__TR")
-statLst = []
-for stat in stats:
-    for item in (stat.select("td.Table__TD > span")):
-        statLst.append(item.text)
+    current = 0
+    for i in range(14, totalLoops+14, 14):
+        statsByPlayer.append(allStats[current:i])
+        current = i
 
-firstItem = statLst[0]
-stopPoint = statLst[1:].index(firstItem)
-statLst = statLst[:stopPoint]
+    playerToStats = {}
 
-totalIndex = statLst.index("Total") + 1
-realPlayerList = statLst[:totalIndex]
-allStats = statLst[totalIndex:] + [""]
+    statHeaders = ["GP","GS","MIN","PTS","OR","DR","REB","AST","STL","BLK","TO","PF","AST/TO","PER"]
 
-statsByPlayer = []
-totalLoops = 14 * len(realPlayerList)
-
-current = 0
-for i in range(14, totalLoops+14, 14):
-    statsByPlayer.append(allStats[current:i])
-    current = i
-
-playerToStats = {}
-
-statHeaders = ["GP","GS","MIN","PTS","OR","DR","REB","AST","STL","BLK","TO","PF","AST/TO","PER"]
-
-playersWithoutPos = []
-positions = []
-for player in realPlayerList:
-    if player != "Total":
-        if player[-1] == "C":
-            position = player[-1]
-            player = player[:-2]
-        else:
-            position = player[-2:]
-            player = player[:-3]
-        positions.append(position)
-        playersWithoutPos.append(player)
+    playersWithoutPos = []
+    positions = []
+    for player in realPlayerList:
+        if player != "Total":
+            if player[-1] == "C":
+                position = player[-1]
+                player = player[:-2]
+            else:
+                position = player[-2:]
+                player = player[:-3]
+            positions.append(position)
+            playersWithoutPos.append(player)
 
 
-for i in range(len(playersWithoutPos)):
-    player = playersWithoutPos[i]
-    stats = statsByPlayer[i]
-    statDict = {}
-    for j in range(len(statHeaders)):
-        statDict[statHeaders[j]] = stats[j]
-    statDict["POSITION"] = positions[i]
+    for i in range(len(playersWithoutPos)):
+        player = playersWithoutPos[i]
+        stats = statsByPlayer[i]
+        statDict = {}
+        statDict["POSITION"] = positions[i]
+        statDict["TEAM"] = teamExtension
+        for j in range(len(statHeaders)):
+            statDict[statHeaders[j]] = stats[j]
+        playerToStats[player] = statDict
 
-    playerToStats[player] = statDict
+    allTeamDicts.append(playerToStats)
 
-for player in playerToStats:
-    print(f"{player}: {playerToStats[player]}")
+print(allTeamDicts)
