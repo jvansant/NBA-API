@@ -78,12 +78,28 @@ playerToStats = {}
 
 statHeaders = ["GP","GS","MIN","PTS","OR","DR","REB","AST","STL","BLK","TO","PF","AST/TO","PER"]
 
-for i in range(len(realPlayerList)):
-    player = realPlayerList[i]
+playersWithoutPos = []
+positions = []
+for player in realPlayerList:
+    if player != "Total":
+        if player[-1] == "C":
+            position = player[-1]
+            player = player[:-2]
+        else:
+            position = player[-2:]
+            player = player[:-3]
+        positions.append(position)
+        playersWithoutPos.append(player)
+
+
+for i in range(len(playersWithoutPos)):
+    player = playersWithoutPos[i]
     stats = statsByPlayer[i]
     statDict = {}
     for j in range(len(statHeaders)):
         statDict[statHeaders[j]] = stats[j]
+    statDict["POSITION"] = positions[i]
+
     playerToStats[player] = statDict
 
 print(playerToStats)
