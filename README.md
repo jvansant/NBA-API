@@ -7,4 +7,18 @@
 
 # General Info
 * Stats for players are as follows:
-* ["GP","GS","MIN","PTS","OR","DR","REB","AST","STL","BLK","TO","PF","AST/TO","PER"]
+  * GP: Games Played
+  * GS: Games Started
+  * MIN: Minutes/Game
+  * PTS: Points/Game
+  * OR: Offensive Rebounds/Game
+  * DR: Defensive Rebounds/Game
+  * REB: Total Rebounds/Game
+  * AST: Assists/Game
+  * STL: Steals/Game
+  * BLK: Blocks/Game
+  * TO: Turnovers/Game
+  * PF: Fouls/Game
+  * AST/TO: Assist-to-Turnover Ratio
+  * PER: Player Efficiency Rating
+* Team stats are compiled from all players on roster, but exclude GS, MIN, and PER
