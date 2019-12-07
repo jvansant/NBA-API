@@ -35,10 +35,15 @@ fullTeamDict = {
     "no": "New Orleans Pelicans",
     "sa": "San Antonio Spurs"
 }
-# Right now this is just a list that holds all of the dicts for each team, there's no compiled stats or anything like that yet
-# I just wanted to get the framework ready to iterate through ALL of the teams to get every player
+# Hey Josh--shot you a text but just a reminder:
+# playerToStats is a dictionary with players (strings) as keys and their stats (dicts) as values.
+# teamToStats is a dictionary with teams (strings) as keys and their stats (dicts) as values.
+# Stats that don't make sense for teams--games started, minutes, PER, etc--are not included
 # This way we're primed to get the database created, and then we're off to the races
-allTeamDicts = []
+# I *think* this is all the scraping we'll need, at least for now.
+
+playerToStats = {}
+teamToStats = {}
 for teamExtension in teams:
     url = "https://www.espn.com/nba/team/stats/_/name/"
     teamUrl = url + teamExtension
@@ -51,8 +56,8 @@ for teamExtension in teams:
 
     html = BeautifulSoup(raw_html, "html.parser")
     players = html.select("tbody.Table__TBODY > tr.Table__TR > td.Table__TD > span > a.AnchorLink")
-
     stats = html.select("tbody.Table__TBODY > tr.Table__TR")
+
     statLst = []
     for stat in stats:
         for item in (stat.select("td.Table__TD > span")):
@@ -68,15 +73,21 @@ for teamExtension in teams:
 
     statsByPlayer = []
     totalLoops = 14 * len(realPlayerList)
-
+    
     current = 0
     for i in range(14, totalLoops+14, 14):
         statsByPlayer.append(allStats[current:i])
         current = i
 
-    playerToStats = {}
-
+    teamStats = statsByPlayer[-1]
     statHeaders = ["GP","GS","MIN","PTS","OR","DR","REB","AST","STL","BLK","TO","PF","AST/TO","PER"]
+    teamDict = {}
+
+    for i in range(len(statHeaders)):
+        if teamStats[i] != "":
+            teamDict[statHeaders[i]] = teamStats[i]            
+
+    teamToStats[fullTeamDict[teamExtension]] = teamDict
 
     playersWithoutPos = []
     positions = []
@@ -90,18 +101,13 @@ for teamExtension in teams:
                 player = player[:-3]
             positions.append(position)
             playersWithoutPos.append(player)
-
-
+    
     for i in range(len(playersWithoutPos)):
         player = playersWithoutPos[i]
         stats = statsByPlayer[i]
         statDict = {}
         statDict["POSITION"] = positions[i]
-        statDict["TEAM"] = teamExtension
+        statDict["TEAM"] = fullTeamDict[teamExtension]
         for j in range(len(statHeaders)):
             statDict[statHeaders[j]] = stats[j]
         playerToStats[player] = statDict
-
-    allTeamDicts.append(playerToStats)
-
-print(allTeamDicts)
