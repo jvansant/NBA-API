@@ -42,72 +42,74 @@ fullTeamDict = {
 # This way we're primed to get the database created, and then we're off to the races
 # I *think* this is all the scraping we'll need, at least for now.
 
-playerToStats = {}
-teamToStats = {}
-for teamExtension in teams:
-    url = "https://www.espn.com/nba/team/stats/_/name/"
-    teamUrl = url + teamExtension
-    response = requests.get(teamUrl)
+def scrape():
+    playerToStats = {}
+    teamToStats = {}
+    for teamExtension in teams:
+        url = "https://www.espn.com/nba/team/stats/_/name/"
+        teamUrl = url + teamExtension
+        response = requests.get(teamUrl)
 
-    if response.status_code == 200 and response.headers["Content-Type"].find("html") > -1:
-        raw_html = response.text
-    else:
-        print("Bad stuff")
+        if response.status_code == 200 and response.headers["Content-Type"].find("html") > -1:
+            raw_html = response.text
+        else:
+            print("Bad stuff")
 
-    html = BeautifulSoup(raw_html, "html.parser")
-    players = html.select("tbody.Table__TBODY > tr.Table__TR > td.Table__TD > span > a.AnchorLink")
-    stats = html.select("tbody.Table__TBODY > tr.Table__TR")
+        html = BeautifulSoup(raw_html, "html.parser")
+        players = html.select("tbody.Table__TBODY > tr.Table__TR > td.Table__TD > span > a.AnchorLink")
+        stats = html.select("tbody.Table__TBODY > tr.Table__TR")
 
-    statLst = []
-    for stat in stats:
-        for item in (stat.select("td.Table__TD > span")):
-            statLst.append(item.text)
+        statLst = []
+        for stat in stats:
+            for item in (stat.select("td.Table__TD > span")):
+                statLst.append(item.text)
 
-    firstItem = statLst[0]
-    stopPoint = statLst[1:].index(firstItem)
-    statLst = statLst[:stopPoint]
+        firstItem = statLst[0]
+        stopPoint = statLst[1:].index(firstItem)
+        statLst = statLst[:stopPoint]
 
-    totalIndex = statLst.index("Total") + 1
-    realPlayerList = statLst[:totalIndex]
-    allStats = statLst[totalIndex:] + [""]
+        totalIndex = statLst.index("Total") + 1
+        realPlayerList = statLst[:totalIndex]
+        allStats = statLst[totalIndex:] + [""]
 
-    statsByPlayer = []
-    totalLoops = 14 * len(realPlayerList)
-    
-    current = 0
-    for i in range(14, totalLoops+14, 14):
-        statsByPlayer.append(allStats[current:i])
-        current = i
+        statsByPlayer = []
+        totalLoops = 14 * len(realPlayerList)
+        
+        current = 0
+        for i in range(14, totalLoops+14, 14):
+            statsByPlayer.append(allStats[current:i])
+            current = i
 
-    teamStats = statsByPlayer[-1]
-    statHeaders = ["GP","GS","MIN","PTS","OR","DR","REB","AST","STL","BLK","TO","PF","AST/TO","PER"]
-    teamDict = {}
+        teamStats = statsByPlayer[-1]
+        statHeaders = ["GP","GS","MIN","PTS","OR","DR","REB","AST","STL","BLK","TO","PF","AST/TO","PER"]
+        teamDict = {}
 
-    for i in range(len(statHeaders)):
-        if teamStats[i] != "":
-            teamDict[statHeaders[i]] = teamStats[i]            
+        for i in range(len(statHeaders)):
+            if teamStats[i] != "":
+                teamDict[statHeaders[i]] = teamStats[i]            
 
-    teamToStats[fullTeamDict[teamExtension]] = teamDict
+        teamToStats[fullTeamDict[teamExtension]] = teamDict
 
-    playersWithoutPos = []
-    positions = []
-    for player in realPlayerList:
-        if player != "Total":
-            if player[-1] == "C":
-                position = player[-1]
-                player = player[:-2]
-            else:
-                position = player[-2:]
-                player = player[:-3]
-            positions.append(position)
-            playersWithoutPos.append(player)
-    
-    for i in range(len(playersWithoutPos)):
-        player = playersWithoutPos[i]
-        stats = statsByPlayer[i]
-        statDict = {}
-        statDict["POSITION"] = positions[i]
-        statDict["TEAM"] = fullTeamDict[teamExtension]
-        for j in range(len(statHeaders)):
-            statDict[statHeaders[j]] = stats[j]
-        playerToStats[player] = statDict
+        playersWithoutPos = []
+        positions = []
+        for player in realPlayerList:
+            if player != "Total":
+                if player[-1] == "C":
+                    position = player[-1]
+                    player = player[:-2]
+                else:
+                    position = player[-2:]
+                    player = player[:-3]
+                positions.append(position)
+                playersWithoutPos.append(player)
+        
+        for i in range(len(playersWithoutPos)):
+            player = playersWithoutPos[i]
+            stats = statsByPlayer[i]
+            statDict = {}
+            statDict["POSITION"] = positions[i]
+            statDict["TEAM"] = fullTeamDict[teamExtension]
+            for j in range(len(statHeaders)):
+                statDict[statHeaders[j]] = stats[j]
+            playerToStats[player] = statDict
+    return playerToStats, teamToStats
