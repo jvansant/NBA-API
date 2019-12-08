@@ -17,11 +17,12 @@ def timed_scrape():
     global players
     global teams
     players, teams = scrape()
+    build_db("player")
     
 
-# while True:
-#     timed_scrape()
-#     time.sleep(1200)
+while True:
+    timed_scrape()
+    time.sleep(1200)
 
 
 def build_db(filename):
@@ -74,8 +75,7 @@ def build_db(filename):
 
 def main():
     """Main function"""
-    timed_scrape()
-    build_db("player")
+
 
 if __name__ == "__main__":
     main()
