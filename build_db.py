@@ -11,18 +11,19 @@ import time
 
 global players
 global teams
-
-def timed_scrape():
-    print(time.ctime())
-    global players
-    global teams
-    players, teams = scrape()
-    build_db("player")
+players, teams = scrape()
+build_db("player")
+# def timed_scrape():
+#     print(time.ctime())
+#     global players
+#     global teams
+#     players, teams = scrape()
+#     build_db("player")
     
 
-while True:
-    timed_scrape()
-    time.sleep(1200)
+# while True:
+#     timed_scrape()
+#     time.sleep(1200)
 
 
 def build_db(filename):
