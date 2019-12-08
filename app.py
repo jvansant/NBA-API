@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 def get_data_from_db(query: str, table) -> list:
     try:
-        conn = psycopg2.connect(host="https://dreamteam330.herokuapp.com/", port=5432, dbname=table)
+        conn = psycopg2.connect(host="dreamteam330.herokuapp.com", port=5432, dbname=table)
     except:
         raise ConnectionError("Bad stuff")
     cur = conn.cursor()
