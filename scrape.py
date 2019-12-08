@@ -45,6 +45,8 @@ fullTeamDict = {
 def scrape():
     playerToStats = {}
     teamToStats = {}
+    pid = 0
+    tid = 0
     for teamExtension in teams:
         url = "https://www.espn.com/nba/team/stats/_/name/"
         teamUrl = url + teamExtension
@@ -85,9 +87,10 @@ def scrape():
         teamDict = {}
 
         for i in range(len(statHeaders)):
+            teamDict["ID"] = tid
             if teamStats[i] != "":
                 teamDict[statHeaders[i]] = teamStats[i]            
-
+        tid += 1
         teamToStats[fullTeamDict[teamExtension]] = teamDict
 
         playersWithoutPos = []
@@ -107,9 +110,11 @@ def scrape():
             player = playersWithoutPos[i]
             stats = statsByPlayer[i]
             statDict = {}
+            statDict["ID"] = pid
             statDict["POSITION"] = positions[i]
             statDict["TEAM"] = fullTeamDict[teamExtension]
             for j in range(len(statHeaders)):
                 statDict[statHeaders[j]] = stats[j]
             playerToStats[player] = statDict
+            pid += 1
     return playerToStats, teamToStats
