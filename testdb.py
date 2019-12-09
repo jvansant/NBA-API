@@ -21,7 +21,7 @@ def select_all_tasks(conn):
     :return:
     """
     cur = conn.cursor()
-    cur.execute("SELECT * FROM player")
+    cur.execute("SELECT name, astTo FROM player WHERE astTo < 100000 ORDER BY astTo DESC LIMIT 10")
  
     rows = cur.fetchall()
  
