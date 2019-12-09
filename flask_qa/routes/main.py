@@ -6,7 +6,7 @@ import os
 
 main = Blueprint('main', __name__)
 
-def get_data_from_db(query: str):
+async def get_data_from_db(query: str):
     DATABASE_URL = os.environ['DATABASE_URL']
     try:
        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -24,13 +24,13 @@ def index():
     return render_template('result.html', teams=asdf, players=qwer)
 
 @main.route('/api/v1.0/team/')
-def team():
+async def team():
     query = "select * from Player"
     query2 = "select * from Team"
-    result = get_data_from_db(query2)
-    result2 = get_data_from_db(query)
+    result = await get_data_from_db(query2)
+    result2 = await get_data_from_db(query)
     print("AESGAWEGAEGAW")
-    print(rows)
+    print(result)
     return render_template('result.html', teams=result, players=result2)
 
 # Team.query.filter_by(name=name).first()
