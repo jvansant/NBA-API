@@ -2,33 +2,13 @@
 
 """Using SQLAlchemy to access a database"""
 
-import csv
 import os
-from config import db
-from models import Player
-from scrape import scrape
-import time
+from .extensions import db
+from .models import Player, Team
 
-global players
-global teams
-players, teams = scrape()
-build_db("player")
-# def timed_scrape():
-#     print(time.ctime())
-#     global players
-#     global teams
-#     players, teams = scrape()
-#     build_db("player")
-    
-
-# while True:
-#     timed_scrape()
-#     time.sleep(1200)
-
-
-def build_db(filename):
+def build_db(players, teams):
     """
-    Create a new database from CSV
+    Create a new database from scraped dictionaries
     1. Delete the database file
     2. Create the database structure
     3. Populate the database
@@ -37,11 +17,13 @@ def build_db(filename):
     if os.path.exists("players.db"):
         print("do we get here?")
         os.remove("players.db")
+    if os.path.exists("teams.db"):
+        print("do we get here?")
+        os.remove("teams.db")
     db.create_all()
-    global players
     for player in players:
         newPlayer = Player(
-            pid = players[player]["ID"],
+            id = players[player]["ID"],
             name = player,
             team = players[player]["TEAM"],
             gp = players[player]["GP"],
@@ -61,22 +43,3 @@ def build_db(filename):
         )
         db.session.add(newPlayer)
     db.session.commit()
-
-    # for animal in zoo:
-    #     the_animal = Animal(
-    #         aid=animal[0],
-    #         name=animal[1],
-    #         age=animal[2],
-    #         species=animal[3],
-    #         location=animal[4]
-    #     )
-    #     db.session.add(the_animal)
-    # db.session.commit()
-
-
-def main():
-    """Main function"""
-
-
-if __name__ == "__main__":
-    main()
