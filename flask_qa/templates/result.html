@@ -9,4 +9,12 @@
 {% endfor %}
 </div>
 
+<div class="container">
+    <h1>Players</h1>
+    {% for player in players %}
+    <li>{{player.name}}</li>
+    {% endfor %}
+</div>
+        
+
 {% endblock %}
