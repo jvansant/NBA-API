@@ -29,6 +29,8 @@ def team():
     query2 = "select * from Team"
     result = get_data_from_db(query2)
     result2 = get_data_from_db(query)
+    print("AESGAWEGAEGAW")
+    print(rows)
     return render_template('result.html', teams=result, players=result2)
 
 # Team.query.filter_by(name=name).first()
