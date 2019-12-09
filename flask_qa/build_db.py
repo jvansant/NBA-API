@@ -13,8 +13,8 @@ def build_db(players, teams):
     2. Create the database structure
     3. Populate the database
     """
-    os.remove("players.db")
-    os.remove("teams.db")
+    db.session.remove()
+    db.drop_all()
     db.create_all()
     for player in players:
         newPlayer = Player(
