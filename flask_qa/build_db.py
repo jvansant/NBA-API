@@ -13,13 +13,8 @@ def build_db(players, teams):
     2. Create the database structure
     3. Populate the database
     """
-    
-    if os.path.exists("players.db"):
-        print("do we get here?")
-        os.remove("players.db")
-    if os.path.exists("teams.db"):
-        print("do we get here?")
-        os.remove("teams.db")
+    os.remove("players.db")
+    os.remove("teams.db")
     db.create_all()
     for player in players:
         newPlayer = Player(
