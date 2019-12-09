@@ -15,7 +15,7 @@ def get_data_from_db(query: str, table) -> list:
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-        query = "select id from player"
+        query = "select * from player"
         result = get_data_from_db(query, "player")
         print(result)
         return render_template("result.html", rows=result)
