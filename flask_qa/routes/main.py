@@ -5,10 +5,13 @@ from flask_qa.models import Player, Team
 
 main = Blueprint('main', __name__)
 
+def create_json():
+    return "asdf"
+
 @main.route('/')
 def index():
-    asdf=Player.query.all()
-    return render_template('result.html', result=asdf)
+    asdf=Team.query.all()
+    return render_template('result.html', teams=asdf)
 
 
 

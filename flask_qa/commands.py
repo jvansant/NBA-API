@@ -19,5 +19,5 @@ def create_tables():
     db.create_all()
     while True:
         timed_scrape()
-        time.sleep(120)
+        time.sleep(1200)
    

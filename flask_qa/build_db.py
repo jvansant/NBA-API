@@ -37,4 +37,21 @@ def build_db(players, teams):
             per = players[player]["PER"]
         )
         db.session.add(newPlayer)
+    for team in teams:
+        newTeam = Team(
+            id = teams[team]["ID"],
+            name = team,
+            gp = teams[team]["GP"],
+            pts = teams[team]["PTS"],
+            ro = teams[team]["OR"],
+            dr = teams[team]["DR"],
+            reb = teams[team]["REB"],
+            ast = teams[team]["AST"],
+            stl = teams[team]["STL"],
+            blk = teams[team]["BLK"],
+            to = teams[team]["TO"],
+            pf = teams[team]["PF"],
+            astTo = teams[team]["AST/TO"]
+        )
+        db.session.add(newTeam)
     db.session.commit()
