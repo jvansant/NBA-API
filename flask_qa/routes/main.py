@@ -27,7 +27,7 @@ def player(playerId):
 @main.route('/api/v1.0/teamRoster/<string:teamAbr>')
 def roster(teamAbr):
     results = Player.query.filter_by(teamabr=teamAbr).all()
-    rosterDict={"roster":{}}
+    rosterDict={"roster":[]}
     for player in results:
-        rosterDict["roster"][player.id] ={"id":player.id, "name":player.name, "team":player.team, "teamAbr":player.teamabr, "gp":player.gp, "gs":player.gs, "min":player.min, "pts":player.pts, "ro":player.ro, "dr":player.dr, "reb":player.reb, "ast":player.ast, "stl":player.stl, "blk":player.blk, "to":player.to, "pf":player.pf, "ast_to":player.astTo, "per":player.per}
+        rosterDict["roster"].append({"id":player.id, "name":player.name, "team":player.team, "teamAbr":player.teamabr, "gp":player.gp, "gs":player.gs, "min":player.min, "pts":player.pts, "ro":player.ro, "dr":player.dr, "reb":player.reb, "ast":player.ast, "stl":player.stl, "blk":player.blk, "to":player.to, "pf":player.pf, "ast_to":player.astTo, "per":player.per})
     return make_response(jsonify(rosterDict), 201)
