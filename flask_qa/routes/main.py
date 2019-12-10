@@ -18,29 +18,8 @@ def team(teamId):
     teamData=jsonify(id=result.id, name=result.name,  gp=result.gp, pts=result.pts, ro=result.ro, dr=result.dr, reb=result.reb, ast=result.ast, stl=result.stl, blk=result.blk)
     return make_response(teamData, 201)
 
-# Team.query.filter_by(name=name).first()
-
-
-# @app.route("/", methods=["GET", "POST"])
-# def index():
-#         query = "select * from player"
-#         result = get_data_from_db(query, "Player")
-#         print(result)
-#         return render_template("result.html", rows=result)
-
-
-# @app.route('/api/v1/players/<int:id>')
-# def player():
-#     jokes=pyjokes.get_jokes("en", "all")
-#     rand=random.randrange(0,201)
-#     joke=jokes[rand]
-#     joke_in_dict ={"joke": joke}
-#     asdf =jsonify(joke_in_dict)
-#     return "<html><body>"+asdf+"</body></html>"
-
-# @app.route('/api/v1/teams/<int:id>')
-# def specific_joke(id):
-#     jokes=pyjokes.get_jokes("en", "all")
-#     joke=jokes[id]
-#     joke_in_dict ={"joke": joke}
-#     return jsonify(joke_in_dict)
+@main.route('/api/v1.0/player/<int:playerId>')
+def player(playerId):
+    result = Team.query.filter_by(id=playerId).first()
+    playerData=jsonify(id=result.id, name=result.name, team=result.team, gp=result.gp, gs=result.gs, min=result.min, pts=result.pts, ro=result.ro, dr=result.dr, reb=result.reb, ast=result.ast, stl=result.stl, blk=result.blk, to=result.to, pf=result.pf, ast_to=result.astTo, per=result.per)
+    return make_response(playerData, 201)
