@@ -6,12 +6,12 @@ import os
 
 main = Blueprint('main', __name__)
 
-@main.route('/')
+@main.route('/api/v1.0/allTeams/')
 def index():
     teamList=[]
     teams=Team.query.all()
     for team in teams:
-        teamList.append(team)
+        teamList.append(team.name)
     teamJson={"teams":teamList}
     return make_response(jsonify(teamJson), 201)
 
