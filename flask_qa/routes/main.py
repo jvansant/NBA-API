@@ -6,8 +6,14 @@ import os
 
 main = Blueprint('main', __name__)
 
-@main.route('/api/v1.0/allTeams/')
+@main.route('/')
 def index():
+    asdf=Team.query.all()
+    qwer=Player.query.all()
+    return render_template('result.html', teams=asdf, players=qwer)
+
+@main.route('/api/v1.0/allTeams/')
+def teams():
     teamList=[]
     teams=Team.query.all()
     for team in teams:
