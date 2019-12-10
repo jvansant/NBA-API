@@ -14,9 +14,9 @@ def index():
 
 @main.route('/api/v1.0/team/<int:teamId>')
 def team(teamId):
-    result = Team.query.filter_by(id=teamId).first()
+    result = Team.query.filter_by(id=teamId)
     teamData=jsonify(id=result.id, name=result.name,  gp=result.gp, pts=result.pts, ro=result.ro, dr=result.dr, reb=result.reb, ast=result.ast, stl=result.stl, blk=result.blk)
-    return render_template('json.html', jteamData=teamData)
+    return make_response(teamData, 201)
 
 # Team.query.filter_by(name=name).first()
 
