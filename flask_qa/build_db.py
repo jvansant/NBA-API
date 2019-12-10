@@ -17,11 +17,17 @@ def build_db(players, teams):
     db.drop_all()
     db.create_all()
     for player in players:
+        if players[player]["TEAM"]=="Los Angeles Clippers":
+            teab='Lac'
+        elif players[player]["TEAM"]=="Los Angeles Lakers":
+            teab='Lac'
+        else:
+            teab=players[player]["TEAM"][0:3]
         newPlayer = Player(
             id = players[player]["ID"],
             name = player,
             team = players[player]["TEAM"],
-            teamabr = players[player]["TEAM"][0:3],
+            teamabr = teab,
             gp = players[player]["GP"],
             gs = players[player]["GS"],
             min = players[player]["MIN"],
