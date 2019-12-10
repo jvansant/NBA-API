@@ -8,9 +8,12 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    asdf=Team.query.all()
-    qwer=Player.query.all()
-    return render_template('result.html', teams=asdf, players=qwer)
+    teamList=[]
+    teams=Team.query.all()
+    for team in teams:
+        teamList.append(team)
+    teamJson={"teams":teamList}
+    return make_response(jsonify(teamJson), 201)
 
 @main.route('/api/v1.0/team/<int:teamId>')
 def team(teamId):
