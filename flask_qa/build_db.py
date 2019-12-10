@@ -20,7 +20,7 @@ def build_db(players, teams):
         if players[player]["TEAM"]=="Los Angeles Clippers":
             teab='Lac'
         elif players[player]["TEAM"]=="Los Angeles Lakers":
-            teab='Lac'
+            teab='Lal'
         else:
             teab=players[player]["TEAM"][0:3]
         newPlayer = Player(
