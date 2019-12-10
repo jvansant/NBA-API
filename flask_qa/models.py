@@ -6,6 +6,7 @@ class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     team = db.Column(db.String)
+    teamabr= db.Column(db.String)
     gp = db.Column(db.Integer)
     gs = db.Column(db.Integer)
     min = db.Column(db.Float)

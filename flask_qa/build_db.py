@@ -21,6 +21,7 @@ def build_db(players, teams):
             id = players[player]["ID"],
             name = player,
             team = players[player]["TEAM"],
+            teamabr = players[player]["TEAM"][0:3],
             gp = players[player]["GP"],
             gs = players[player]["GS"],
             min = players[player]["MIN"],
