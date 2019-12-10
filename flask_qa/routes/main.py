@@ -6,32 +6,17 @@ import os
 
 main = Blueprint('main', __name__)
 
-async def get_data_from_db(query: str):
-    DATABASE_URL = os.environ['DATABASE_URL']
-    try:
-       conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    except:
-        raise ConnectionError("Bad stuff")
-    cur = conn.cursor()
-    cur.execute(query)
-    rows = cur.fetchall()
-    return rows
-
 @main.route('/')
 def index():
     asdf=Team.query.all()
     qwer=Player.query.all()
     return render_template('result.html', teams=asdf, players=qwer)
 
-@main.route('/api/v1.0/team/')
-async def team():
-    query = "select * from Player"
-    query2 = "select * from Team"
-    result = await get_data_from_db(query2)
-    result2 = await get_data_from_db(query)
-    print("AESGAWEGAEGAW")
-    print(result)
-    return render_template('result.html', teams=result, players=result2)
+@main.route('/api/v1.0/team/<int:id>')
+def team(id):
+    result = Team.query.filter(Team.id==id).all()
+    teamData=jsonify(id=result.id, name=result.name,  gp=result.id, pts=result.pts, ro=result.ro, dr=result.dr, reb=result.reb, ast=result.ast, stl=result.stl, blk=result.blk)
+    return render_template('json.html', jteamData=teamData)
 
 # Team.query.filter_by(name=name).first()
 
