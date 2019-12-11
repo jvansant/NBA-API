@@ -23,7 +23,7 @@ def build_db(players, teams):
             teab='Lal'
         else:
             teab=players[player]["TEAM"][0:3]
-        if players[player]["TO"]==0:
+        if players[player]["TO"]==0.0:
             astto=players[player]["AST"]
         else:
             astto=players[player]["AST/TO"]
