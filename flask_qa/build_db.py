@@ -24,7 +24,7 @@ def build_db(players, teams):
         else:
             teab=players[player]["TEAM"][0:3]
 
-        if players[player]["AST/TO"]=='infinity':
+        if players[player]["AST/TO"]=='Infinity':
             ast_to=players[player]["AST"]
         else:
             ast_to=players[player]["AST/TO"]
