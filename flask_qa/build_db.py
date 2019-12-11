@@ -45,7 +45,7 @@ def build_db(players, teams):
             blk = players[player]["BLK"],
             to = players[player]["TO"],
             pf = players[player]["PF"],
-            astTo = astto,
+            astTo = ast_to,
             per = players[player]["PER"]
         )
         db.session.add(newPlayer)
