@@ -23,6 +23,10 @@ def build_db(players, teams):
             teab='Lal'
         else:
             teab=players[player]["TEAM"][0:3]
+        if players[player]["TO"]==0:
+            astto=players[player]["AST"]
+        else:
+            astto=players[player]["AST/TO"]
         newPlayer = Player(
             id = players[player]["ID"],
             name = player,
@@ -40,7 +44,7 @@ def build_db(players, teams):
             blk = players[player]["BLK"],
             to = players[player]["TO"],
             pf = players[player]["PF"],
-            astTo = players[player]["AST/TO"],
+            astTo = astto,
             per = players[player]["PER"]
         )
         db.session.add(newPlayer)
