@@ -115,6 +115,8 @@ def scrape():
             statDict["TEAM"] = fullTeamDict[teamExtension]
             for j in range(len(statHeaders)):
                 statDict[statHeaders[j]] = stats[j]
+            if statDict["AST/TO"]=="INF":
+                statDict["AST/TO"]=statDict["AST"]
             playerToStats[player] = statDict
             pid += 1
     return playerToStats, teamToStats

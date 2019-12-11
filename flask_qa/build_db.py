@@ -24,7 +24,7 @@ def build_db(players, teams):
         else:
             teab=players[player]["TEAM"][0:3]
 
-        if players[player]["AST/TO"]>10000:
+        if players[player]["AST/TO"]=="INF":
             ast_to=players[player]["AST"]
         else:
             ast_to=players[player]["AST/TO"]
