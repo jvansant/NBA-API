@@ -5,6 +5,11 @@
 * We then create an API that returns information from that database in JSON format
 * Our Flask application then opens a web app that we will continue to develop, which in turn uses the API
 
+# API INFO
+* [General API link](https://dreamteam330.herokuapp.com/) - HTML displaying all teams and player names that have been scraped. 
+* [Player By ID](https://dreamteam330.herokuapp.com/api/v1.0/player/250) - JSON of player data based on id given in url
+* [Team Roster](https://dreamteam330.herokuapp.com/api/v1.0/teamRoster/Lac) - JSON of all players on a team. Team based on first three letters of team's name given in url
+
 # General Info
 * Stats for players are as follows:
   * GP: Games Played
