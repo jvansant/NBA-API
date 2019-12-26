@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 teams = ["bos","bkn","ny","phi","tor","chi","cle","det","ind","mil","den","min","okc","por","utah","gs","lac","lal","phx","sac","atl","cha","mia","orl","wsh","dal","hou","mem","no","sa"]
-# For now I'm using this dict to put more meaningful info in the player team attribute. Might try to scrape it instead, we'll see.
+# For now I'm using this dict to put more meaningful info in the player team attribute. Might try to scrape it instead, we'll see...
 fullTeamDict = {
     "bos": "Boston Celtics",
     "bkn": "Brooklyn Nets",
