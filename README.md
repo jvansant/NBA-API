@@ -1,6 +1,4 @@
-# README
-
-# Welcome to Josh and David's Final Project for CS 330, taught by Roman Yasinovskyy
+# Welcome to our NBA Statistics API
 * In this project, we scrape player and team data from espn.com and compile them into a database
 * We then create an API that returns information from that database in JSON format
 * Last we made an NBA DreamTeam web app that uses our API: https://dream-team-nba.herokuapp.com/
