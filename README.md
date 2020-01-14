@@ -1,3 +1,4 @@
+# https://dream-team-nba.herokuapp.com/
 # Welcome to our NBA Statistics API
 * In this project, we scrape player and team data from espn.com and compile them into a database
 * We then create an API that returns information from that database in JSON format
