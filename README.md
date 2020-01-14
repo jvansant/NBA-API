@@ -25,3 +25,6 @@
   * AST/TO: Assist-to-Turnover Ratio
   * PER: Player Efficiency Rating
 * Team stats are compiled from all players on roster, but exclude GS, MIN, and PER
+
+
+# Created by Josh Van Sant and David Will 
